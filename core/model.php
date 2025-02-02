@@ -21,7 +21,6 @@
                   parent::ATTR_ERRMODE => parent::ERRMODE_EXCEPTION,
                   parent::ATTR_EMULATE_PREPARES => 1,
                   parent::ATTR_PERSISTENT => 1,
-                  parent::MYSQL_ATTR_USE_BUFFERED_QUERY => 0,
                   parent::ATTR_DEFAULT_FETCH_MODE => parent::FETCH_ASSOC
               );
               parent::__construct(
