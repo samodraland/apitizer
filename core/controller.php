@@ -51,7 +51,6 @@
         }
 
         protected function json( $result ){
-            $appOrigin = Properties::getProperties("app");
             $isJSONP = array_key_exists( "jsonpcallback", $this->parameters["queries"] );
             $contentType = ( !$isJSONP ) ? "application/json" : "application/javascript";
             header("Content-Type: $contentType; charset=UTF-8");
@@ -63,7 +62,7 @@
 
         protected function html( $template, $result = null ){
             header("Content-type: text/html; charset=UTF-8");
-            return Utils::templating( $template, $result );
+            return Utils::renderTemplate( $template, $result );
         }
 
         protected function xml( $result ){

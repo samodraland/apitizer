@@ -2,42 +2,15 @@
 
 $properties = array(
     "app" => array(
-        "name" => "project name",
         "lctime" => "id_ID",
         "timezone" => "Asia/Jakarta",
-        "dev" => array(
-            "url" => "http://localhost:8080"
-        ),
-        "prod" => array(
-            "url" => "https://domain.com"
-        ),
+        "supportHtaccess" => true
     ),
-    "url" => array(
-        "dev" => "http://localhost/api/myproject",
-        "prod" => "https://domain.com/api/myproject"
-    ),
-    "email" => array(
-        "dev" => array(
-            "host" => "localhost",
-            "displayname" => "Company name",
-            "replyto" => "company@localhost.com",
-            "useragent" => "Company",
-            "username" => "user.no-reply@localhost.com",
-            "email" => "company.email@localhost.com",
-            "password" => "mypassword",
-            "embedimage" => "view/img/"
-        ),
-        "prod" => array(
-            "host" => "domain.com",
-            "displayname" => "Company name",
-            "replyto" => "company.no-reply@domain.com",
-            "useragent" => "Company",
-            "username" => "user.no-reply@domain.com",
-            "email" => "company.no-reply@domain.com",
-            "password" => "secret",
-            "embedimage" => "view/img/"
-        )
-    ),
+    "env" => array(
+        "dev" => "http://localhost",
+        "staging" => "https://yourstagingdomain.com",
+        "prod" => "https://yourproductiondomain.com"
+    ),    
     "db" => array(
         "dev" => array(
             "driver" => "mysql", //mysql || postgresql || sqlserver
@@ -45,6 +18,13 @@ $properties = array(
             "name" => "db_name",
             "user" => "root",
             "pwd" => ""
+        ),
+        "staging" => array(
+            "driver" => "mysql", //mysql || postgresql || sqlserver
+            "host" => "localhost",
+            "name" => "your_db_name",
+            "user" => "your_db_username",
+            "pwd" => "your_db_password"
         ),
         "prod" => array(
             "driver" => "mysql", //mysql || postgresql || sqlserver
@@ -55,16 +35,21 @@ $properties = array(
         ),    
     ),
     "view" => array(
-        "dev" => "view",
-        "prod" => "view"
+        "dev" => "/view",
+        "staging" => "/view",
+        "prod" => "/view"
     ),
     "assets" => array(
-        "dev" => "assets",
-        "prod" => "assets"
+        "dev" => "/assets",
+        "staging" => "/assets",
+        "prod" => "/assets"
     ),
     "showerror" => array(
         "dev" => true,
+        "staging" => false,
         "prod" => false
     )
 );
+
+return $properties;
 ?>

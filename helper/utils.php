@@ -5,18 +5,13 @@
         
         public static function responseHeader($code, $textonly = false){
             include("static/responsecode.php");
-            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');            
-            return (!$textonly) ? $protocol .' '. $http[ $code ] : substr($http[ $code ], 4);
-        }
-
-        public static function hasValue( $val ){
-            return ( isset($val) && !is_null($val) && !empty($val) ) ? true : false;
+            $protocol = (isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.0");            
+            return (!$textonly) ? $protocol ." ". $http[ $code ] : substr($http[ $code ], 4);
         }
 
         public static function response( $code, $msg = [] ){
-            header( "Access-Control-Allow-Origin: *", false );
-            header( "Content-Type: application/json" );
             header( self::responseHeader($code) );
+            header("Content-Type: application/json; charset=UTF-8");
             return json_encode(array(
                 "response" => $code,
                 "message" => self::responseHeader($code, true),
@@ -57,12 +52,13 @@
         }
         
         public static function getHeaders() {
-            $headers = [];
-            foreach ($_SERVER as $name => $value) {
-                if (substr($name, 0, 5) == 'HTTP_') {
-                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-                }
-            }
+            $headers = array();
+            $allowedHeader = Properties::getOtherProperties("allowed","headers");
+            $keys = array_keys(array_filter($_SERVER, function($value, $key) use ($allowedHeader) {
+                return count(array_intersect($allowedHeader, explode('_', $key))) > 0;
+            }, ARRAY_FILTER_USE_BOTH));
+            $headers = array_intersect_key($_SERVER, array_flip($keys));
+
             return $headers;
         }
         
@@ -72,23 +68,12 @@
             return $protocol.$domainName.dirname($_SERVER['PHP_SELF']);
         }
         
-        public static function templating( $template , $data = null ){
-            $view = Properties::getProperties("view");
-            $url = Properties::getProperties("url");
-            if (file_exists("$view$template.php")){
+        public static function renderTemplate( $template , $data = null ){
+            $view = trim(Properties::getProperties("view"),"/");
+            $url = trim(Properties::getProperties("url"),"/");
+            if (file_exists("$view/$template.php")){
                 $postdata = (!is_null($data)) ? http_build_query($data) : "";
-                /*
-                $opts = array('http' =>
-                    array(
-                        'method'  => 'POST',
-                        'header'  => 'Content-Type: application/x-www-form-urlencoded',
-                        'content' => $postdata
-                    )
-                );
-                $context = stream_context_create($opts);
-                $output = file_get_contents( "$url/$view$template.php", false, $context);
-                */
-                $ch = curl_init("$url/$view$template.php");
+                $ch = curl_init("$url/$view/$template.php");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
                 $output = curl_exec($ch);
@@ -98,27 +83,7 @@
                 return self::response(404, "Template file doesn't exist");
             }
         }
-        
-        public static function base64ToImage($dataUri, $filename, $realpath, $thumbnailpath = ""){
-            if ($dataUri != ""){
-                $extension = explode("/",explode(";",$dataUri)[0]);
-                $realfile = $realpath.$filename.".".$extension[1];
-                $img = base64_decode(explode(",", $dataUri )[1]);
-                file_put_contents($realfile, $img);
-                if ($thumbnailpath != ""){
-                    $thumbnail = $thumbnailpath.$filename.".".$extension[1];
-                    copy( $realfile , $thumbnail );
-                    $image = new Image();
-                    $image->load($thumbnail);
-                    $image->scale(15);
-                    $image->save($thumbnail);    
-                }
-                return $filename.".".$extension[1];
-            }else{
-                return "";
-            }            
-        }
-        
+                        
         public static function testQuery($sql, $params = array()){
             foreach($params as $key => $value) $sql = str_replace($key, "'$value'", $sql);
             return $sql;

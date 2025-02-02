@@ -4,10 +4,9 @@
 
         private $method = "";
         private $collection = array();
-        private $token = null;
 
         function __construct(){
-            ob_start('ob_gzhandler');
+            ob_start("ob_gzhandler");
             date_default_timezone_set( Properties::getProperties("app", "timezone") );
             
             $this->method = $_SERVER['REQUEST_METHOD'];
@@ -15,7 +14,7 @@
             parse_str($parsedurl["query"], $this->collection["queries"]);
             $url = rtrim($parsedurl["path"], "/");
             $base = dirname($_SERVER['PHP_SELF']);
-            $endpoint = substr($url, strlen($base) + 1);
+            $endpoint = (Properties::getProperties("app", "supportHtaccess")) ? substr($url, strlen($base) + 1) : $_GET["endpoint"];
             $controllfile = explode("/",$endpoint);
             
             $this->collection["url"]["controller"] = ( !empty($endpoint) ) ? $controllfile[0] : $controllfile;
@@ -26,7 +25,7 @@
             $this->collection["url"]["path"] = $base . "/" . $endpoint;
             $this->collection["headers"] = Utils::getHeaders();
             $this->collection["keys"] = array();
-            $this->token = new Token();
+
             if (isset($_SERVER['HTTP_ORIGIN'])) {
                 header("Access-Control-Allow-Origin: *");
                 header("Content-Encoding: gzip", false);
@@ -44,16 +43,48 @@
             if (trim($this->collection["url"]["endpoint"]) == "/" && !is_null($home)){
                 $this->collection["url"]["controller"] = $home;
             }
+
             if (file_exists("controller/".$this->collection["url"]["controller"].".php")){
-                parse_str(file_get_contents("php://input"),$postvars);
-                $this->collection["data"] = array_merge($_POST, $postvars, $_FILES);
+
+                $inputs = file_get_contents("php://input");
+                
                 $controller = ucfirst($this->collection["url"]["controller"]);
                 $class = new $controller;
-                $class->setParameters( $this->collection );
+
                 if (method_exists($class,strtolower($this->method))){
-                    call_user_func(
-                        array($class,strtolower($this->method))
-                    );
+
+                    if ($this->method == "PUT" || $this->method == "PATCH"){
+                        if ($inputs != ""){
+                            $boundary = substr($inputs, 0, strpos($inputs, "\r\n"));
+                            $parts = array_slice(explode($boundary, $inputs), 1);
+                            $postvars = array();
+                            foreach ($parts as $part) {
+                                list($rawheaders, $body) = explode("\r\n\r\n", $part, 2);
+                                $rawheaders = explode("\r\n", $rawheaders);
+                                $headers = array();
+                                foreach ($rawheaders as $header) {
+                                    list($headername, $headervalue) = explode(": ", $header);
+                                    $headers[$headername] = $headervalue;
+                                }
+                                if (isset($headers['Content-Disposition'])) {
+                                    preg_match('/name="([^"]+)"/', $headers['Content-Disposition'], $matches);
+                                    $name = $matches[1];
+                                    $postvars[$name] = $body;
+                                }
+                            }
+                        }else{
+                            die(Utils::response(400));
+                        }
+                    }else{
+                        if($inputs != ""){
+                            $postvars = json_decode($inputs,true);
+                        }else{
+                            parse_str($inputs,$postvars);
+                        }                        
+                    }
+                    $this->collection["data"] = array_merge($_POST, $postvars, $_FILES);
+                    $class->setParameters( $this->collection );
+                    call_user_func( array($class,strtolower($this->method)) );
                 }else{
                     die(Utils::response(405));
                 }
