@@ -323,6 +323,7 @@ Working directory:
         | `$this->xml( array $result ): string` | returns XML formatted string. |
 
         Url: https://yourdomain/employees/10
+        
         Result:
 
         ```
@@ -386,6 +387,7 @@ Working directory:
         ```
 
 - **Model**
+
   Model uses PDO & perepared statement for database functionality. In model has one function to execute & return SQL query result back to the controller.
   Create model:
 
