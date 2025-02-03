@@ -85,17 +85,17 @@ Working directory:
   > With htaccess enabled:
   > - simple url: https://yourdomain/yourcontroller
   > - with query string: https://yourdomain/yourcontroller?page=2
-  >
+  > 
   > Without htaccess enabled:
   > - simple url: https://yourdomain/?endpoint=yourcontroller
   > - with query string: https://yourdomain/?endpoint=yourcontroller&page=2
-  >
+  > 
   > **controller route: `"/status/:status"`**
   > 
   > With htaccess enabled:
   > - simple url: https://yourdomain/yourcontroller/status/active
   > - with query string: https://yourdomain/yourcontroller/status/active?page=2
-  >
+  > 
   > Without htaccess enabled:
   > - simple url: https://yourdomain/?endpoint=yourcontroller/status/active
   > - with query string: https://yourdomain/?endpoint=yourcontroller/status/active&page=2
@@ -118,7 +118,7 @@ Working directory:
     return $mycustomconfig;
   ```
 
-  > Calling this custom configuration: `Properties::getOtherProperties($mycustomconfig, $key, $subkey)`.
+  > Calling this custom configuration: `Properties::getOtherProperties("mycustomconfig", $key, $subkey)`.
 
 - **Router & Controller**
   Apitizer doesn't use separate router file, but is defined inside each request method function name of each controller. Your controller file name is used as the endpoint and the request method is defined as a public function name.
@@ -277,7 +277,7 @@ Working directory:
       ```
 
   4.  **Return value formats**
-      Apitizer returns in these formats:
+     Apitizer returns in these formats:
 
       - | Function                               | Description                    |
         | :------------------------------------- | :----------------------------- |
@@ -341,7 +341,8 @@ Working directory:
         HTML page template must be provided under `/view` directory. `$templateName` parameter value is a PHP file name without mentioning its path & extension. There is no special template syntax on how to handle the `$result` parameter. It is the same as native PHP.
         Url: https://yourdomain/employees/10
         Result:
-        `mytemplate.php`
+
+        `view/mytemplate.php`
 
         ```
         <!DOCTYPE html>
