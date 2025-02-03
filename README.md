@@ -4,6 +4,8 @@ As the name suggests, which is a play on the word appetizer, this boilerplate is
 
 Most of my projects are small to medium scale and need to be completed quickly. Therefore, I don’t have much time to try and use the existing frameworks out there for the backend side of my projects, but I use framework for the frontend side most of the time since I work as a Frontend Developer. I made this simple boilerplate to suit what I need for my projects. Now I decided to open source it. Maybe this boilerplate will work for you too.
 
+If you are willing to contribute please fork it to your own repo and create PR/MR when you are going to merge.
+
 ## What is Apitizer?
 
 Apitizer is a boilerplate to generate JSON/JSONP, XML and simple HTML template rendering.
@@ -76,26 +78,25 @@ Working directory:
   > Calling this default configuration: `Properties::getProperties($key, $subkey)`.
 
   > If your server doesn't enable/support .htaccess change `supportHtaccess` value to false and query string parameter `/?endpoint=` will be used as your API endpoint while router path definition in the controller remains the same.
+  >
   > Example:
   > **controller route: `"/"`**
+  > 
   > With htaccess enabled:
-  >
   > - simple url: https://yourdomain/yourcontroller
   > - with query string: https://yourdomain/yourcontroller?page=2
   >
   > Without htaccess enabled:
-  >
   > - simple url: https://yourdomain/?endpoint=yourcontroller
   > - with query string: https://yourdomain/?endpoint=yourcontroller&page=2
   >
   > **controller route: `"/status/:status"`**
+  > 
   > With htaccess enabled:
-  >
   > - simple url: https://yourdomain/yourcontroller/status/active
   > - with query string: https://yourdomain/yourcontroller/status/active?page=2
   >
   > Without htaccess enabled:
-  >
   > - simple url: https://yourdomain/?endpoint=yourcontroller/status/active
   > - with query string: https://yourdomain/?endpoint=yourcontroller/status/active&page=2
 
@@ -197,7 +198,6 @@ Working directory:
         Example: `/:id`. The API url will be https://yourdomain/employees/123. The `id` is a parameter name with value 123.
       - Url with query string doesn't need to be defined as a specific route. It follows any route as long as the API url matches the specified route pattern. Apitizer handles it as a regular query parameter.
         Examples:
-
         - Url https://yourdomain/employees?page=2 will be executed under `/` route.
         - Url https://yourdomain/employees/123?page=2 will be executed under `/:id` route.
         - Url https://yourdomain/employees/firstname?page=2 will be executed under `/firstname` route.
