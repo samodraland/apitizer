@@ -43,7 +43,7 @@ class Employees extends Controller{
                 if ($format == "xml"){                    
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("view-employees",$result["result"]);
+                    return $this->html("web-page/view-employees",$result["result"]);
                 } else {                    
                     return $this->json($result);
                 }
@@ -63,7 +63,7 @@ class Employees extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("view-employees",$result["result"]);
+                    return $this->html("web-page/view-employees",$result["result"]);
                 } else {
                     return $this->json($result);
                 }
@@ -94,7 +94,7 @@ class Employees extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("view-employees",$result["result"]);
+                    return $this->html("web-page/view-employees",$result["result"]);
                 } else {
                     return $this->json($result);
                 }
@@ -113,11 +113,47 @@ class Employees extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("view-employees",$result["result"]);
+                    return $this->html("web-page/view-employees",$result["result"]);
                 } else {
                     return $this->json($result);
                 }
             },
+
+            "/email/:id" => function( $callbackvalues ){
+                /**
+                 * This endpoint is to send email using PHPMailer library.
+                 * If you test this on local mail server please setup an email account on your local mail server.
+                 * Change email address from one of the employees data to your email account.
+                 * The email template source can be viewed under /view/email-templaye/theme1
+                 */
+                $schema = array(
+                    ":id" => Utils::validateString( $callbackvalues["keys"]["id"] )
+                );
+                $record = $this->model->getEmployeeById( $schema );
+                $templateString = Utils::renderTemplate("/email-template/theme1/index", array(
+                    "FullName" => $record["result"][0]["FirstName"] . " " . $record["result"][0]["LastName"]
+                ));
+                $mail = new Mailer(); 
+                $mailResult = $mail->sendMail(
+                    $record["result"][0]["Email"], 
+                    $record["result"][0]["FirstName"],
+                    "Email testing",
+                    $templateString,
+                    array(
+                        array(
+                            "cid" => "mytheme1cid",
+                            "image" => Properties::getProperties("email")["embedimage"]."/theme1/images/header.jpg"
+                        )
+                    )
+                );
+                if ($mailResult["response"] == 200){
+                    $mailResult["message"] = "Email has been sent";
+                    $mailResult["result"] = $record["result"];
+                    return $this->json($mailResult);
+                }else{
+                    return $this->json($mailResult);
+                }                
+            }
 
         ));
     }

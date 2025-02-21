@@ -13,9 +13,9 @@
 
         public static function getProperties($key, $subkey = null){
             self::init("properties");
-            $host = parse_url($_SERVER["HTTP_HOST"])["path"];
+            $host = $_SERVER["HTTP_HOST"];
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-            $env = array_search(rtrim($protocol.$host,"/"), self::$prop["properties"]["env"]);
+            $env = array_search( rtrim($protocol.$host.dirname($_SERVER["PHP_SELF"]),"/"), self::$prop["properties"]["env"] );
             return ( is_null($subkey) ) ? self::$prop["properties"][$key][$env] : self::$prop["properties"][$key][$subkey];            
         }
 

@@ -68,12 +68,13 @@
             return $protocol.$domainName.dirname($_SERVER['PHP_SELF']);
         }
         
-        public static function renderTemplate( $template , $data = null ){
+        public static function renderTemplate( $tpl , $data = null ){
             $view = trim(Properties::getProperties("view"),"/");
-            $url = trim(Properties::getProperties("url"),"/");
+            $env = trim(Properties::getProperties("env"),"/");
+            $template = trim($tpl,"/");
             if (file_exists("$view/$template.php")){
                 $postdata = (!is_null($data)) ? http_build_query($data) : "";
-                $ch = curl_init("$url/$view/$template.php");
+                $ch = curl_init("$env/$view/$template.php");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
                 $output = curl_exec($ch);
