@@ -33,7 +33,7 @@ This project is still under development for further refinement but it's producti
    ```
 
 3. This repo includes example of controller, model & sql file for you to test. Create new MySQL DB and execute apitizer.sql.
-4. Done
+4. do `composer install`
 
 ### Structures
 
@@ -80,24 +80,28 @@ Working directory:
 
   > If your server doesn't enable/support .htaccess change `supportHtaccess` value to false and query string parameter `/?endpoint=` will be used as your API endpoint while router path definition in the controller remains the same.
   >
-  > Example: 
+  > Example:
   > **controller route: `"/"`**
-  > 
+  >
   > With htaccess enabled:
+  >
   > - simple url: https://yourdomain/yourcontroller
   > - with query string: https://yourdomain/yourcontroller?page=2
-  >      
+  >
   > Without htaccess enabled:
+  >
   > - simple url: https://yourdomain/?endpoint=yourcontroller
   > - with query string: https://yourdomain/?endpoint=yourcontroller&page=2
-  >       
+  >
   > **controller route: `"/status/:status"`**
-  > 
+  >
   > With htaccess enabled:
+  >
   > - simple url: https://yourdomain/yourcontroller/status/active
   > - with query string: https://yourdomain/yourcontroller/status/active?page=2
-  >       
+  >
   > Without htaccess enabled:
+  >
   > - simple url: https://yourdomain/?endpoint=yourcontroller/status/active
   > - with query string: https://yourdomain/?endpoint=yourcontroller/status/active&page=2
 
@@ -111,6 +115,7 @@ Working directory:
   Example:
 
   `static/mycustomconfig.php`
+
   ```
     $mycustomconfig = array(
       "parentkey1" => array(
@@ -131,6 +136,7 @@ Working directory:
   Create controller:
 
   `controller/employees.php`
+
   ```
   class Employees extends Controller{
     private $model = null;
@@ -198,10 +204,12 @@ Working directory:
       - With trailing endpoint.
 
         Example: `/firstname`. The API url will be https://yourdomain/employees/firstname
+
       - With parameter `/:yourparametername`. The parameter name must start with a `:` character followed by the parameter name. This will be a placeholder for the actual value that will be inserted into the url.
         Example: `/:id`. The API url will be https://yourdomain/employees/123. The `id` is a parameter name with value 123.
       - Url with query string doesn't need to be defined as a specific route. It follows any route as long as the API url matches the specified route pattern. Apitizer handles it as a regular query parameter.
         Examples:
+
         - Url https://yourdomain/employees?page=2 will be executed under `/` route.
         - Url https://yourdomain/employees/123?page=2 will be executed under `/:id` route.
         - Url https://yourdomain/employees/firstname?page=2 will be executed under `/firstname` route.
@@ -323,7 +331,7 @@ Working directory:
         | `$this->xml( array $result ): string` | returns XML formatted string. |
 
         Url: https://yourdomain/employees/10
-        
+
         Result:
 
         ```

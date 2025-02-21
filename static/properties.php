@@ -7,7 +7,8 @@ $properties = array(
         "supportHtaccess" => true
     ),
     "env" => array(
-        "dev" => "http://localhost",
+        "dev" => "http://localhost/apitizer",
+        // "dev" => "http://localhost",
         "staging" => "https://yourstagingdomain.com",
         "prod" => "https://yourproductiondomain.com"
     ),    
@@ -15,7 +16,7 @@ $properties = array(
         "dev" => array(
             "driver" => "mysql", //mysql || postgresql || sqlserver
             "host" => "localhost",
-            "name" => "db_name",
+            "name" => "apitizer",
             "user" => "root",
             "pwd" => ""
         ),
@@ -33,6 +34,35 @@ $properties = array(
             "user" => "root",
             "pwd" => "secret"
         ),    
+    ),
+    "email" => array(
+        "dev" => array(
+            "host" => "localhost",
+            "displayname" => "Apitizer Boilerplate",
+            "replyto" => "apitizer@localhost.com",
+            "username" => "apitizer@localhost.com",
+            "email" => "apitizer@localhost.com",
+            "password" => "apitizer",
+            "embedimage" => "/view/email-template"
+        ),
+        "staging" => array(
+            "host" => "yourdomain",
+            "displayname" => "Your display name",
+            "replyto" => "youraccount@yourdomain.com",
+            "username" => "yourusername@yourdomain.com",
+            "email" => "yourusername@yourdomain.com",
+            "password" => "yourpassword",
+            "embedimage" => "/your/image/path"
+        ),
+        "prod" => array(
+            "host" => "yourdomain",
+            "displayname" => "Your display name",
+            "replyto" => "youraccount@yourdomain.com",
+            "username" => "yourusername@yourdomain.com",
+            "email" => "yourusername@yourdomain.com",
+            "password" => "yourpassword",
+            "embedimage" => "/your/image/path"
+        )
     ),
     "view" => array(
         "dev" => "/view",

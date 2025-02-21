@@ -30,7 +30,6 @@
         </thead>
         <tbody>
             <?php
-                print_r($_POST);
                 foreach($_POST as $key => $value){
             ?>
             <tr>
