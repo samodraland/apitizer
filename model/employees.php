@@ -1,6 +1,9 @@
 <?php
 
-class EmployeeModel extends Model{
+namespace Model;
+use Core\Model;
+
+class Employees extends Model{
 
     private $query = "
         select

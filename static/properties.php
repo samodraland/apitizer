@@ -8,13 +8,12 @@ $properties = array(
     ),
     "env" => array(
         "dev" => "http://localhost/apitizer",
-        // "dev" => "http://localhost",
         "staging" => "https://yourstagingdomain.com",
         "prod" => "https://yourproductiondomain.com"
     ),    
     "db" => array(
         "dev" => array(
-            "driver" => "mysql", //mysql || postgresql || sqlserver
+            "driver" => "mysql",
             "host" => "localhost",
             "name" => "apitizer",
             "user" => "root",

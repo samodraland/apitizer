@@ -1,8 +1,10 @@
 <?php
 
+    namespace Helper;
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
+    use Core\Properties;
 
     class Mailer{
 
