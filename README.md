@@ -1,19 +1,17 @@
+<img src="https://raw.githubusercontent.com/samodraland/apitizer/refs/heads/main/assets/apitizer.png" alt="drawing" width="300"/>
+<br/>
+
 ## APITIZER
 
-As the name suggests, which is a play on the word appetizer, this boilerplate is a simple structure & small code with minimal configuration that is ready to be used as an appetizer for your code as the main course.
+As the name suggests, which is a play on the word appetizer, this framework is a simple structure & small code with minimal configuration that is ready to be used as an appetizer for your code as the main course.
 
-Most of my projects are small to medium scale and need to be completed quickly. Therefore, I don’t have much time to try and use the existing frameworks out there for the backend side of my projects, but I use framework for the frontend side most of the time since I work as a Frontend Developer. I made this simple boilerplate to suit what I need for my projects. Now I decided to open source it. Maybe this boilerplate will work for you too.
+Most of my projects are small to medium scale and need to be completed quickly. Therefore, I don’t have much time to try and use the existing frameworks out there for the backend side of my projects, but I use framework for the frontend side most of the time since I work as a Frontend Developer. I made this simple framework to suit what I need for my projects. Now I decided to open source it. Maybe this framework will work for you too.
 
 If you are willing to contribute please fork it to your own repo and create PR/MR when you are going to merge.
 
 ## What is Apitizer?
 
-Apitizer is a boilerplate to generate JSON/JSONP, XML and simple HTML template rendering.
-
-This project is still under development for further refinement but it's production ready. Short roadmap to be added:
-
-- Middleware.
-- JWT
+Apitizer is a framework to generate JSON/JSONP, XML and simple HTML template rendering.
 
 ## Documentation
 
