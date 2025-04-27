@@ -1,4 +1,8 @@
 <?php
+
+    namespace Helper;
+    use Core\Properties;
+    
     class Utils{
 
         private static $alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

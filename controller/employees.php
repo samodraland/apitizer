@@ -7,7 +7,7 @@
  * Just in this example, each endpoint uses the query string parameter "?format=" just to demonstrate different outputs 
  * to the available formats: JSON, JSONP, XML & HTML template. The default output is JSON if there's no "?format=" in the url.
  * If there's jsonpcallback query string in url ("?jsonpcallback=your_callback_name") then it outputs as JSONP.
- * In the real code choose the desired output format.
+ * In the real code choose the desired output format. Default is JSON.
  * 
  * You can create parameter schema by calling Utils::constructSchema() to collect all parameters automatically
  * or you can construct parameter schema manually:
@@ -23,12 +23,19 @@
  * 
  */
 
+namespace Controller;
+use Core\Controller;
+use Model\Employees as EmployeesModel;
+use Helper\Utils;
+use Helper\Mailer;
+use Core\Properties;
+
 class Employees extends Controller{
 
     private $model = null;
 
     function __construct(){
-        $this->model = new EmployeeModel();
+        $this->model = new EmployeesModel();
     }
 
     public function get(){
@@ -39,13 +46,14 @@ class Employees extends Controller{
              */
             "/" => function( $callbackvalues ){
                 $result = $this->model->getAllEmployees();
-                $format = $callbackvalues["queries"]["format"];
+                $format = $callbackvalues::getData("queries.format");
                 if ($format == "xml"){                    
                     return $this->xml($result);
                 } else if ($format == "html"){
                     return $this->html("web-page/view-employees",$result["result"]);
                 } else {                    
-                    return $this->json($result);
+                    $json = $this->json($result);
+                    return $json;
                 }
             },
 
@@ -56,16 +64,17 @@ class Employees extends Controller{
             "/:id" => function( $callbackvalues ){
                 // construct schema manually
                 $schema = array(
-                    ":id" => Utils::validateString( $callbackvalues["keys"]["id"] )
+                    ":id" => Utils::validateString( $callbackvalues::getData("keys.id") )
                 );
                 $result = $this->model->getEmployeeById( $schema );
-                $format = $callbackvalues["queries"]["format"];
+                $format = $callbackvalues::getData("queries.format");
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
                     return $this->html("web-page/view-employees",$result["result"]);
                 } else {
-                    return $this->json($result);
+                    $json = $this->json($result);
+                    return $json;
                 }
             },
 
@@ -74,10 +83,10 @@ class Employees extends Controller{
              * url: http://yourdomain/employees/status/the_status?page=1
              */
             "/status/:status" => function( $callbackvalues ){
-                $page = empty($callbackvalues["queries"]) ? 0 : $callbackvalues["queries"]["page"];
+                $page = empty($callbackvalues::getData("queries")) ? 0 : $callbackvalues::getData("queries.page");
                 
                 // construct schema automatically
-                $schema = Utils::constructSchema($callbackvalues["keys"]);
+                $schema = Utils::constructSchema($callbackvalues::getData("keys"));
                 
                 /**
                  * We're calling Utils::constructSchema() to create formated SQL parameter automatically, 
@@ -90,7 +99,7 @@ class Employees extends Controller{
 
                 // after removed parameter can be passed to the model
                 $result = $this->model->getByStatus( $schema, $page * 10 );
-                $format = $callbackvalues["queries"]["format"];
+                $format = $callbackvalues::getData("queries.format");
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
@@ -142,7 +151,7 @@ class Employees extends Controller{
                     array(
                         array(
                             "cid" => "mytheme1cid",
-                            "image" => Properties::getProperties("email")["embedimage"]."/theme1/images/header.jpg"
+                            "image" => Properties::getDataProperties("email")["embedimage"]."/theme1/images/header.jpg"
                         )
                     )
                 );

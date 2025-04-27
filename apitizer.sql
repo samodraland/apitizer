@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2025 at 11:55 AM
+-- Generation Time: Apr 27, 2025 at 02:57 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -48,7 +48,7 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `status`) VALU
 (6, 'Guillermo', 'Yate', 'gyate5@vinaora.com', 'INACTIVE'),
 (7, 'Jacki', 'Yurchenko', 'jyurchenko6@who.int', 'ACTIVE'),
 (8, 'Carlynn', 'Robet', 'crobet7@craigslist.org', 'INACTIVE'),
-(9, 'Alon', 'D\'Aulby', 'adaulby8@europa.eu', 'ACTIVE'),
+(9, 'Alon', 'D''Aulby', 'adaulby8@europa.eu', 'ACTIVE'),
 (10, 'Misha', 'Geroldi', 'mgeroldi9@google.co.uk', 'INACTIVE'),
 (11, 'Aurlie', 'Skinn', 'askinna@fotki.com', 'ACTIVE'),
 (12, 'Breena', 'Filippone', 'bfilipponeb@ovh.net', 'INACTIVE'),
@@ -59,7 +59,7 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `status`) VALU
 (17, 'Ingelbert', 'Jeckells', 'ijeckellsg@tripadvisor.com', 'ACTIVE'),
 (18, 'Tybie', 'Count', 'tcounth@bloglovin.com', 'INACTIVE'),
 (19, 'Joshuah', 'Foss', 'jfossi@typepad.com', 'ACTIVE'),
-(20, 'Zea', 'Shinfield', 'zshinfieldj@yellowbook.com', 'INACTIVE'),
+(20, 'Zea', 'Shinfield', 'mac@localhost.com', 'INACTIVE'),
 (21, 'Robbert', 'Arntzen', 'rarntzenk@abc.net.au', 'ACTIVE'),
 (22, 'Davide', 'Byrd', 'dbyrdl@miitbeian.gov.cn', 'INACTIVE'),
 (23, 'Quintina', 'Whife', 'qwhifem@yale.edu', 'ACTIVE'),
@@ -141,6 +141,19 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `status`) VALU
 (99, 'Isidoro', 'Akister', 'iakister2q@usda.gov', 'ACTIVE'),
 (100, 'Lilli', 'Siggs', 'lsiggs2r@ovh.net', 'INACTIVE');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `id` int(11) NOT NULL,
+  `route` text COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `endpoint` text COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -152,6 +165,13 @@ ALTER TABLE `employee`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -159,7 +179,13 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

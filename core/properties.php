@@ -1,8 +1,10 @@
 <?php
 
+    namespace Core;
+
     class Properties{
         
-        private static $prop = array();
+        private static $prop = [];
 
         private static function init($filename){
             if (!array_key_exists($filename, self::$prop)){
