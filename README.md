@@ -116,6 +116,7 @@ Working directory:
   If your server doesn't enable/support mod_rewrite in .htaccess change `supportHtaccess` value to false and query string parameter `/?endpoint=` will be used as your API endpoint while router path definition in the controller remains the same.
      
   **controller route: `"/"`**
+  
   Example:
   >
   > With htaccess enabled:
@@ -130,6 +131,7 @@ Working directory:
   >
 
   **controller route: `"/status/:status"`**
+  
   Example:
   >
   > With htaccess enabled:
@@ -156,10 +158,12 @@ Working directory:
   1. Define `namespace Controller`
   2. Define `use Core\Controller`
   3. Extends your class from Controller
-  4. Import other class by: `use namespace\Classname`.
-  5. If your other class name is the same with controller use alias: `use namespace\SameClassNameAsController as NewAlias`
+  4. Import other class by: `use DirectoryName\Classname`.
+  5. If your other class name is the same with controller use alias: `use DirectoryName\SameClassNameAsController as NewAlias`
   6. Save it under controller directory
 
+  example:
+  
   `controller/employees.php`
 
   ```
@@ -438,7 +442,7 @@ Working directory:
   
   This middleware runs on all endpoints and can modify request before entering controller and/or modify response after entering controller. Global middleware is suitable for Logger, Authentication and any process required for every request & response from the endpoint. This middleware works like layers of an onion that can be illustrated as follows:
 
-  | endpoint url -> | middleware 1 -> | middleware 2 -> | controller -> | middleware 2 -> | middleware 1 -> | output |
+  | endpoint -> | middleware1 -> | middleware2 -> | controller -> | middleware2 -> | middleware1 -> | output |
   | :- | :- | :- | :- | :- | :- | :- |
 
   How to create global middleware:
@@ -446,16 +450,16 @@ Working directory:
   1. Define `namespace Middleware`
   2. Define `use Core\Middleware`
   3. Extends your class from Middleware
-  4. Import other class by: `use namespace\Classname`.
-  5. If your other class name is the same with middleware use alias: `use namespace\SameClassNameAsController as NewAlias`
+  4. Import other class by: `use DirectoryName\Classname`.
+  5. If your other class name is the same with middleware use alias: `use DirectoryName\SameClassNameAsController as NewAlias`
   6. Save it under middleware directory
 
-  `middleware/logger.php`
+  `middleware/yourmiddleware.php`
 
   ```
   namespace Middleware;
   use Core\Middleware;
-  class Logger extends Middleware{
+  class YourMiddleware extends Middleware{
      public function get($sequence){
         if ($sequence == "before"){
             //do something before middleware reaches controller
@@ -471,7 +475,7 @@ Working directory:
   `static/middleware.php`
 
   ```
-  $globalMiddlewares = array("Logger", "Middleware2", "MiddlewareN");
+  $globalMiddlewares = array("YourMiddleware", "AnotherMiddleware", "AnotherNMiddleware");
   return $globalMiddlewares;
   ```
 
@@ -489,16 +493,54 @@ Working directory:
   | :- | :- |
   | `$this::setData("Array.Tree.As.In.Controller.Callback", $value)` | Set new value |
   | `$this::getData("Array.Tree.As.In.Controller.Callback")` | Get value |
+
+  example:
+  ```
+  namespace Middleware;
+  use Core\Middleware;
+  use Model\Logger as LoggerModel;
+
+  class Logger extends Middleware{
+     private $model = null;
+     function __construct(){
+        $this->model = new LoggerModel();
+     }
+     public function get($sequence){
+        $this::setData("flag.log", "log user activity"); // will be executed no matter before/after reach controller
+        if ($sequence == "before"){
+            // will be executed before reach controller
+            $this::setData("keys.newvalue", "your new value"); // modify keys and add newkey with new value
+            $this::setData("flag.somekey", "new array item"); // insert new key called "flag" with new value
+            $this->model->doSomeQuery(); // call sql in model
+        }else{
+           //will be executed after reach controller
+           $this::getData("flag.somekey"); //get data with from flag => somekey
+           $this::setData("records.result.0.newkey", "your new value"); // modify first array item of fetch result and add "newkey" with new value
+        }
+     }
+  }
+  ```
   
 **4. Model**
 <hr/>
 
   Model uses PDO & perepared statement for database functionality. In model has one function to execute & return SQL query result back to the controller.
-  Create model:
+  
+  How to create model:
+  
+  1. Define `namespace Model`
+  2. Define `use Core\Model`
+  3. Extends your class from Model
+  4. Import other class by: `use DirectoryName\Classname`.
+  5. If your other class name is the same with middleware use alias: `use DirectoryName\SameClassNameAsController as NewAlias`
+  6. Save it under model directory
+
 
   `model/employeesmodel.php`
 
   ```
+  namespace Model;
+  use Core\Model;
   class EmployeesModel extends Model{
 
     public function getAllEmployees(){
