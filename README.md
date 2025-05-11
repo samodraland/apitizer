@@ -5,7 +5,9 @@
 
 As the name suggests, which is a play on the word appetizer, this framework is a simple structure & small code with minimal configuration that is ready to be used as an appetizer for your code as the main course.
 
-Most of my projects are small to medium scale and need to be completed quickly. Therefore, I don’t have much time to try and use the existing frameworks out there for the backend side of my projects, but I use framework for the frontend side most of the time since I work as a Frontend Developer. I made this simple framework to suit what I need for my projects. Now I decided to open source it. Maybe this framework will work for you too.
+## History
+
+Most of my projects are small to medium scale and need to be completed quickly. Therefore, I don’t have much time to try and use the existing frameworks out there for the backend side of my projects, but I always use framework for the frontend side since most of the time I work as a Frontend Developer. I made this simple framework to suit what I need for my projects. Now I decided to open source it. Maybe this framework will work for you too.
 
 If you are willing to contribute please fork it to your own repo and create PR/MR when you are going to merge.
 
@@ -35,76 +37,45 @@ Apitizer is a framework to generate JSON/JSONP, XML and simple HTML template ren
 
 ### Structures
 
-Apitizer applies MVC design pattern with OOP.
+Apitizer applies MVC design pattern with OOP. There is no specific router to handle the endpoint url since the endpoint name and its handler is the controller name.
 
 Main directory:
 
-- `core`: This directory is where the main codes are that make this boilerplate works.
+- `core`: This directory is where the main codes are that make this framework works.
 
 Working directory:
 
-- `controller`: directory for your controller.
+- `controller`: directory for your controllers as the handler of the router endoint. 
 - `model`: directory for your model files that contain SQL queries.
 - `helper`: directory for Apitizer default library or your own library.
-- `static`: directory for configurations.
+- `static`: directory for static content for configurations or middlewares list.
 - `vendor`: directory for 3rd party libraries.
-- `view`: directory for your PHP template files.
+- `view`: directory for your template files.
 
 ### Manual
 
-- **Configuration**
+**1. Configuration**
+<hr/>
 
   Default configurations are located inside static/properties.php. You can change/add your custom configuration.
 
   **Global config**
-  | Config | Description |
-  | :------------------------------------ | :---------------------------- |
-  | `app["lctime"]` | local region information. |
-  | `app["timezone"]` | your app time zone. |
-  | `app["supportHtaccess"]` | htaccess support in your server |
-  | `env["dev"]` | url path to your development environment |
-  | `env["staging"]` | url path to your staging/UAT environment |
-  | `env["prod"]` | url path to your production environment |
+  
+  | Config | Type | Description |
+  | :- | :- | :- |
+  | `app["lctime"]` | String | Local region information. |
+  | `app["timezone"]` | String | Your app time zone. List can be seen here: [https://www.php.net/manual/en/timezones.php](https://www.php.net/manual/en/timezones.php) |
+  | `app["supportHtaccess"]` | Boolean | htaccess support in your server. Setting true or false whether your server doesn't support htaccess or you don't use htaccess |
+  | `env["dev"]` | String | url path to your development environment |
+  | `env["staging"]` | String | url path to your staging/UAT environment |
+  | `env["prod"]` | String | url path to your production environment |
 
-  **Environment based config**
-  | Config | Description |
-  | :----------------- | :-------------------------------------------------------- |
-  | `db` | database connection configuration. |
-  | `view` | location of your template files. |
-  | `assets` | location of your assets files such as images, videos etc. |
-  | `showerror` | to show/hide SQL error message in the response body. |
+  Calling configuration:
+  ```
+  Properties::getProperties($key, $subkey = null): array | string
+  ```  
+  ex: `Properties::getProperties("app", "timezone")`
 
-  > Calling this default configuration: `Properties::getProperties($key, $subkey)`.
-
-  > If your server doesn't enable/support .htaccess change `supportHtaccess` value to false and query string parameter `/?endpoint=` will be used as your API endpoint while router path definition in the controller remains the same.
-  >
-  > Example:
-  > **controller route: `"/"`**
-  >
-  > With htaccess enabled:
-  >
-  > - simple url: https://yourdomain/yourcontroller
-  > - with query string: https://yourdomain/yourcontroller?page=2
-  >
-  > Without htaccess enabled:
-  >
-  > - simple url: https://yourdomain/?endpoint=yourcontroller
-  > - with query string: https://yourdomain/?endpoint=yourcontroller&page=2
-  >
-  > **controller route: `"/status/:status"`**
-  >
-  > With htaccess enabled:
-  >
-  > - simple url: https://yourdomain/yourcontroller/status/active
-  > - with query string: https://yourdomain/yourcontroller/status/active?page=2
-  >
-  > Without htaccess enabled:
-  >
-  > - simple url: https://yourdomain/?endpoint=yourcontroller/status/active
-  > - with query string: https://yourdomain/?endpoint=yourcontroller/status/active&page=2
-
-  > If controller or method doesn't exist then endpoint returns error code 404 or 405.
-  > The error will be displayed/hidden depends on `showerror` configuration
 
   **Custom configuration**
 
@@ -116,7 +87,7 @@ Working directory:
 
   ```
     $mycustomconfig = array(
-      "parentkey1" => array(
+      "parent1" => array(
         "key1" => "value1",
         "key2" => "value2"
       )
@@ -124,18 +95,81 @@ Working directory:
     return $mycustomconfig;
   ```
 
-  > Calling this custom configuration: `Properties::getOtherProperties("mycustomconfig", $key, $subkey)`.
+  Calling custom configuration:
+  ```
+  Properties::getOtherProperties("yourconfigname", $key, $subkey = null) : array | string
+  ```
+  ex: `Properties::getOtherProperties("mycustomconfig", "parent1", "key1")`
 
-- **Router & Controller**
+  Note
+  : If `$subkey` is not supplied then the configuration will return array of `$key`'s value with current environment
 
-  Apitizer doesn't use separate router file, but is defined inside each request method function name of each controller. Your controller file name is used as the endpoint and the request method is defined as a public function name.
+
+  **Environment based config**
+  | Config | Description |
+  | :----------------- | :-------------------------------------------------------- |
+  | `db` | database connection configuration. |
+  | `view` | location of your template files. |
+  | `assets` | location of your assets files such as images, videos etc. |
+  | `showerror` | to show/hide SQL error message in the response body. |
+
+  If your server doesn't enable/support mod_rewrite in .htaccess change `supportHtaccess` value to false and query string parameter `/?endpoint=` will be used as your API endpoint while router path definition in the controller remains the same.
+     
+  **controller route: `"/"`**
+  Example:
+  >
+  > With htaccess enabled:
+  >
+  > - simple url: https://yourdomain/yourcontroller
+  > - with query string: https://yourdomain/yourcontroller?page=2
+  
+  > Without htaccess enabled:
+  > 
+  > - simple url: https://yourdomain/?endpoint=yourcontroller
+  > - with query string: https://yourdomain/?endpoint=yourcontroller&page=2
+  >
+
+  **controller route: `"/status/:status"`**
+  Example:
+  >
+  > With htaccess enabled:
+  >
+  > - simple url: https://yourdomain/yourcontroller/status/active
+  > - with query string: https://yourdomain/yourcontroller/status/active?page=2
+
+  > Without htaccess enabled:
+  >
+  > - simple url: https://yourdomain/?endpoint=yourcontroller/status/active
+  > - with query string: https://yourdomain/?endpoint=yourcontroller/status/active&page=2
+
+  If controller or method doesn't exist then endpoint returns error code 404.
+  The error will be displayed/hidden depends on `showerror` configuration  
+
+**2. Router & Controller**
+<hr/>
+
+  Apitizer doesn't use separate router file for the API endpoint. Your controller file name is used as the endpoint and the request methods are defined as a public function name.
   Follow the RESTful API resource naming principles of being clean, clear, and simple. ([https://restfulapi.net/resource-naming](https://restfulapi.net/resource-naming)).
 
-  Create controller:
+  How to create controller like how OOP concept works in PHP
+  
+  1. Define `namespace Controller`
+  2. Define `use Core\Controller`
+  3. Extends your class from Controller
+  4. Import other class by: `use namespace\Classname`.
+  5. If your other class name is the same with controller use alias: `use namespace\SameClassNameAsController as NewAlias`
+  6. Save it under controller directory
 
   `controller/employees.php`
 
   ```
+  namespace Controller;
+  use Core\Controller;
+  use Model\Employees as EmployeesModel; //same class name
+  use Helper\Utils;
+  use Helper\Mailer;
+  use Core\Properties;
+
   class Employees extends Controller{
     private $model = null;
 
@@ -177,9 +211,10 @@ Working directory:
 
   **Anatomy**
 
-  1.  **Request Method**
+  - **Request Method**
+  
       | Method handler | Description |
-      | :----------------- | :-------------------------------------------------------- |
+      | :- | :- |
       | `public function get(): void` | Handles GET method. |
       | `public function post(): void` | Handles POST method. |
       | `public function delete(): void` | Handles DELETE method. |
@@ -191,20 +226,22 @@ Working directory:
 
       > Write only the method handlers you need.
 
-  2.  **Routing**
+  - **Routing**
+  
       | Function | Description |
-      | :----------------- | :-------------------------------------------------------- |
+      | :- | :- |
       | `$this->map(array): void` | Defines your routes array.|
 
       How to define routes:
 
       - Base route `/` without trailing endpoint will refer to the controller file name. The API url will be https://yourdomain/employees
+     
       - With trailing endpoint.
-
         Example: `/firstname`. The API url will be https://yourdomain/employees/firstname
 
       - With parameter `/:yourparametername`. The parameter name must start with a `:` character followed by the parameter name. This will be a placeholder for the actual value that will be inserted into the url.
         Example: `/:id`. The API url will be https://yourdomain/employees/123. The `id` is a parameter name with value 123.
+        
       - Url with query string doesn't need to be defined as a specific route. It follows any route as long as the API url matches the specified route pattern. Apitizer handles it as a regular query parameter.
         Examples:
 
@@ -220,17 +257,18 @@ Working directory:
 
         > Apitizer recognizes the difference between `/:id` and `/firstname` routes. From the example above, if `/firstname` is defined as a route then url like https://yourdomain/employees/firstname will be executed under `/firstname` route. If `/firstname` is not defined as a route then url like https://yourdomain/employees/firstname will be executed under `/:id` route and the value of `id` variable name is firstname
 
-  3.  **Callback values**
+  - <a name="callbackvalues"></a>**Callback values**
 
       `$callbackvalues` (you can replace it with any variable name you want) is the return value of each route callback.
 
-      | Value     | Description                                                                                                                                                                       |
-      | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-      | `queries` | Query string that available in the url.                                                                                                                                           |
-      | `url`     | Details of url.                                                                                                                                                                   |
+      | Value | Description |
+      | :- | :- |
+      | `queries` | Query string that available in the url. |
+      | `url` | Details of url. |
       | `headers` | Get http headers. The default is to get all headers containing the "HTTP" key. You can customize what headers to get by modifying it in static/allowed.php in the header section. |
-      | `keys`    | placeholder/parameter name included in the route.                                                                                                                                 |
-      | `data`    | data passed via non-GET methods.                                                                                                                                                  |
+      | `keys` | placeholder/parameter name included in the route. |
+      | `data` | data passed via non-GET methods. |
+      | `records` | hold result of data fetched from model |
 
       For example: a route pattern /firstname/:x/lastname/:y with POST request, its url is https://yourdomain/employees/firstname/john/lastname/doe?status=active and the form data is:
 
@@ -282,11 +320,11 @@ Working directory:
                     [email] => johndoe@domain.com
                     [birthdate] => 1990-07-09
                 )
-
+            [records] => Array()
         )
       ```
 
-  4.  **Return value formats**
+  - **Return value formats**
 
       Apitizer returns in these formats:
 
@@ -349,8 +387,8 @@ Working directory:
           </root>
         ```
 
-      - | Function                                                     | Description                    |
-        | :----------------------------------------------------------- | :----------------------------- |
+      - | Function | Description |
+        | :- | :- |
         | `$this->html( string $templateName, array $result ): string` | returns HTML formatted string. |
 
         HTML page template must be provided under `/view` directory. `$templateName` parameter value is a PHP file name without mentioning its path & extension. There is no special template syntax on how to handle the `$result` parameter. It is the same as native PHP.
@@ -391,8 +429,69 @@ Working directory:
 
         </html>
         ```
+**3. Middleware**
+<hr/>
 
-- **Model**
+  Apitizer has middleware feature that consists of global and controller specific. 
+
+  A. Global middleware
+  
+  This middleware runs on all endpoints and can modify request before entering controller and/or modify response after entering controller. Global middleware is suitable for Logger, Authentication and any process required for every request & response from the endpoint. This middleware works like layers of an onion that can be illustrated as follows:
+
+  | endpoint url -> | middleware 1 -> | middleware 2 -> | controller -> | middleware 2 -> | middleware 1 -> | output |
+  | :- | :- | :- | :- | :- | :- | :- |
+
+  How to create global middleware:
+  
+  1. Define `namespace Middleware`
+  2. Define `use Core\Middleware`
+  3. Extends your class from Middleware
+  4. Import other class by: `use namespace\Classname`.
+  5. If your other class name is the same with middleware use alias: `use namespace\SameClassNameAsController as NewAlias`
+  6. Save it under middleware directory
+
+  `middleware/logger.php`
+
+  ```
+  namespace Middleware;
+  use Core\Middleware;
+  class Logger extends Middleware{
+     public function get($sequence){
+        if ($sequence == "before"){
+            //do something before middleware reaches controller
+        }else{
+           //do something after middleware reaches controller
+        }
+     }
+  }
+  ```
+
+  Register your global middleware:
+
+  `static/middleware.php`
+
+  ```
+  $globalMiddlewares = array("Logger", "Middleware2", "MiddlewareN");
+  return $globalMiddlewares;
+  ```
+
+  B. Controller specific middleware
+
+  This middleware runs only when specific controller is called from API endpoint before executing the logic of controller and/or after executing the logic of controller
+
+  How to create specific controller middleware is the same as global middleware but the only differences are:
+  - Name and save this specific controller **with same file name as the Controller**
+  - No need to register in `static/middleware.php`
+
+  Middleware plays on the same [$callbackvalues](#user-content-callbackvalues) in Controller map() to manipulate data on request or response.
+
+  | Function | Description |
+  | :- | :- |
+  | `$this::setData("Array.Tree.As.In.Controller.Callback", $value)` | Set new value |
+  | `$this::getData("Array.Tree.As.In.Controller.Callback")` | Get value |
+  
+**4. Model**
+<hr/>
 
   Model uses PDO & perepared statement for database functionality. In model has one function to execute & return SQL query result back to the controller.
   Create model:
@@ -416,8 +515,8 @@ Working directory:
 
   **Anatomy**
 
-  | Function                                                             | Description               |
-  | :------------------------------------------------------------------- | :------------------------ |
+  | Function | Description |
+  | :- | :- |
   | `$this->execute( string $sql, [array $parameter = array()] ): array` | execute sql query string. |
 
   `$parameter`: an optional array that its structure follows PDO array named values.
@@ -431,17 +530,17 @@ Working directory:
 
 Apitizer includes default helper functions for basic usage under static `Utils` class. This class is just a collection of functions that doesn't implement special design pattern. You can modify to add your own custom function into this class and call it by `Utils::yourFunction()`.
 
-| Function                                                            | Description                                                                                                                                                                                          |
-| :------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `responseHeader(string $code, [boolean $textonly = false]): string` | Returns response header. If `$textonly` is true then it returns response text only of `$code` parameter.                                                                                             |
-| `response( string $code, [array $msg = []]): string`                | Returns JSON formated with response code, reponse message and array of results.                                                                                                                      |
-| `generateRandomString(int $length = 6): string`                     | Return random string with default length is 6 characters.                                                                                                                                            |
+| Function | Description |
+| :-| :-|
+| `responseHeader(string $code, [boolean $textonly = false]): string` | Returns response header. If `$textonly` is true then it returns response text only of `$code` parameter. |
+| `response( string $code, [array $msg = []]): string` | Returns JSON formated with response code, reponse message and array of results. |
+| `generateRandomString(int $length = 6): string` | Return random string with default length is 6 characters. |
 | `generatePassword(int $length = 8, [string $pwd = null]): string`   | Returns a hashed string with default length is 8 characters. If `$pwd` is null then it will hash random string from `generateRandomString` function. If `$pwd` is not null it returns hashed `$pwd`. |
-| `constructSchema(...$param): array`                                 | This function is for auto constructing a PDO array named values needed for model parameter.                                                                                                          |
-| `validateString(string $str): string`                               | Validate a string before processed into SQL query.                                                                                                                                                   |
-| `validateXmlString(string $str): string`                            | Validate a string for XML.                                                                                                                                                                           |
-| `formatDate(string $date,string $format): string`                   | A date format based on local time configuration.                                                                                                                                                     |
-| `getHeaders()`                                                      | Get request headers. You can customize what headers to get by modifying it in static/allowed.php in the header section.                                                                              |
-| `getCurrentDir()`                                                   | Get current directory.                                                                                                                                                                               |
-| `renderTemplate( string $template , [array $data = null] ): string` | Run a PHP page with post `$data` and render it as HTML.                                                                                                                                              |
-| `testQuery(string $sql, [array $params = array()])`                 | Test your query to see what your query will look like before executing it in the model.                                                                                                              |
+| `constructSchema(...$param): array` | This function is for auto constructing a PDO array named values needed for model parameter. |
+| `validateString(string $str): string` | Validate a string before processed into SQL query. |
+| `validateXmlString(string $str): string` | Validate a string for XML. |
+| `formatDate(string $date,string $format): string` | A date format based on local time configuration. |
+| `getHeaders()` | Get request headers. You can customize what headers to get by modifying it in static/allowed.php in the header section. |
+| `getCurrentDir()` | Get current directory. |
+| `renderTemplate( string $template , [array $data = null] ): string` | Run a PHP page with post `$data` and render it as HTML. |
+| `testQuery(string $sql, [array $params = array()])` | Test your query to see what your query will look like before executing it in the model. |
