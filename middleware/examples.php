@@ -1,9 +1,10 @@
 <?php
 
 namespace Middleware;
+
 use Core\Middleware;
 
-class Employees extends Middleware{
+class Examples extends Middleware{
     
     public function get($sequence){
         if($sequence == "before"){
