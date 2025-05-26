@@ -1,6 +1,7 @@
 <?php
 
 namespace Middleware;
+
 use Core\Middleware;
 use Model\Logger as LoggerModel;
 use Helper\Utils;

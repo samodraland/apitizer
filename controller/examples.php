@@ -24,33 +24,34 @@
  */
 
 namespace Controller;
+
 use Core\Controller;
-use Model\Employees as EmployeesModel;
+use Model\Examples as ExamplesModel;
 use Helper\Utils;
 use Helper\Mailer;
 use Core\Properties;
 
-class Employees extends Controller{
+class Examples extends Controller{
 
     private $model = null;
 
     function __construct(){
-        $this->model = new EmployeesModel();
+        $this->model = new ExamplesModel();
     }
 
     public function get(){
         $this->map(array(
             /**
              * example without parameter
-             * url: http://yourdomain/employees
+             * url: http://yourdomain/examples
              */
             "/" => function( $callbackvalues ){
-                $result = $this->model->getAllEmployees();
+                $result = $this->model->getAllExamples();
                 $format = $callbackvalues::getData("queries.format");
                 if ($format == "xml"){                    
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("web-page/view-employees",$result["result"]);
+                    return $this->html("web-page/view-examples",$result["result"]);
                 } else {                    
                     $json = $this->json($result);
                     return $json;
@@ -59,19 +60,19 @@ class Employees extends Controller{
 
             /**
              * example with 1 parameter
-             * url: http://yourdomain/employees/10
+             * url: http://yourdomain/examples/10
              */
             "/:id" => function( $callbackvalues ){
                 // construct schema manually
                 $schema = array(
                     ":id" => Utils::validateString( $callbackvalues::getData("keys.id") )
                 );
-                $result = $this->model->getEmployeeById( $schema );
+                $result = $this->model->getExampleById( $schema );
                 $format = $callbackvalues::getData("queries.format");
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("web-page/view-employees",$result["result"]);
+                    return $this->html("web-page/view-examples",$result["result"]);
                 } else {
                     $json = $this->json($result);
                     return $json;
@@ -80,7 +81,7 @@ class Employees extends Controller{
 
             /**
              * example with more specific url with 1 parameter placeholder and query string for pagination
-             * url: http://yourdomain/employees/status/the_status?page=1
+             * url: http://yourdomain/examples/status/the_status?page=1
              */
             "/status/:status" => function( $callbackvalues ){
                 $page = empty($callbackvalues::getData("queries")) ? 0 : $callbackvalues::getData("queries.page");
@@ -103,7 +104,7 @@ class Employees extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("web-page/view-employees",$result["result"]);
+                    return $this->html("web-page/view-examples",$result["result"]);
                 } else {
                     return $this->json($result);
                 }
@@ -115,14 +116,14 @@ class Employees extends Controller{
              */
             "/search/:keyword/status/:status" => function( $callbackvalues ){
                 // construct schema automatically
-                $schema = Utils::constructSchema($callbackvalues["keys"]);
-                $result = $this->model->searchEmployee( $schema );
+                $schema = Utils::constructSchema($callbackvalues::getData("keys"));
+                $result = $this->model->searchExample( $schema );
                 unset($schema[":format"]);
-                $format = $callbackvalues["queries"]["format"];
+                $format = $callbackvalues::getData("queries.format");
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("web-page/view-employees",$result["result"]);
+                    return $this->html("web-page/view-examples",$result["result"]);
                 } else {
                     return $this->json($result);
                 }
@@ -132,13 +133,13 @@ class Employees extends Controller{
                 /**
                  * This endpoint is to send email using PHPMailer library.
                  * If you test this on local mail server please setup an email account on your local mail server.
-                 * Change email address from one of the employees data to your email account.
+                 * Change email address from one of the examples data to your email account.
                  * The email template source can be viewed under /view/email-templaye/theme1
                  */
                 $schema = array(
-                    ":id" => Utils::validateString( $callbackvalues["keys"]["id"] )
+                    ":id" => Utils::validateString( $callbackvalues::getData("keys.id") )
                 );
-                $record = $this->model->getEmployeeById( $schema );
+                $record = $this->model->getExampleById( $schema );
                 $templateString = Utils::renderTemplate("/email-template/theme1/index", array(
                     "FullName" => $record["result"][0]["FirstName"] . " " . $record["result"][0]["LastName"]
                 ));
@@ -151,7 +152,7 @@ class Employees extends Controller{
                     array(
                         array(
                             "cid" => "mytheme1cid",
-                            "image" => Properties::getDataProperties("email")["embedimage"]."/theme1/images/header.jpg"
+                            "image" => Properties::getProperties("email")["embedimage"]."/theme1/images/header.jpg"
                         )
                     )
                 );
@@ -170,13 +171,12 @@ class Employees extends Controller{
     public function delete(){
         $this->map(array(
             "/:id" => function( $callbackvalues ){
-                return;
                 // construct schema automatically
-                $schema = Utils::constructSchema($callbackvalues["keys"]);
+                $schema = Utils::constructSchema($callbackvalues::getData("keys"));
                 // check if id exists
-                $check = $this->model->getEmployeeById( $schema );
+                $check = $this->model->getExampleById( $schema );
                 if (!empty($check["result"])){
-                    $result = $this->model->deleteEmployee( $schema );
+                    $result = $this->model->deleteExample( $schema );
                     return $this->json($result);
                 }else{
                     die(Utils::response(404) );
@@ -193,8 +193,8 @@ class Employees extends Controller{
         $this->map(array(
             "/" => function( $callbackvalues ){
                 // construct schema automatically
-                $schema = Utils::constructSchema($callbackvalues["data"]);
-                $result = $this->model->newEmployee( $schema );
+                $schema = Utils::constructSchema($callbackvalues::getData("data"));
+                $result = $this->model->newExample( $schema );
                 return $this->json($result);
             }
         ));
@@ -204,18 +204,18 @@ class Employees extends Controller{
         $this->map(array(
             "/:id" => function( $callbackvalues ){
                 // construct schema automatically
-                $id = Utils::constructSchema($callbackvalues["keys"]);
+                $id = Utils::constructSchema($callbackvalues::getData("keys"));
                 // check if id exists
-                $check = $this->model->getEmployeeById( $id );
+                $check = $this->model->getExampleById( $id );
                 if (!empty($check["result"])){
                     // construct schema manually
                     $schema = array(
-                        ":first" => Utils::validateString( $callbackvalues["data"]["first"] ),
-                        ":last" => Utils::validateString( $callbackvalues["data"]["last"] ),
-                        ":email" => Utils::validateString( $callbackvalues["data"]["email"] ),
-                        ":id" => Utils::validateString( $callbackvalues["keys"]["id"] )
+                        ":first" => Utils::validateString( $callbackvalues::getData("data.first") ),
+                        ":last" => Utils::validateString( $callbackvalues::getData("data.last") ),
+                        ":email" => Utils::validateString( $callbackvalues::getData("data.email") ),
+                        ":id" => Utils::validateString( $callbackvalues::getData("keys.id") )
                     );
-                    $result = $this->model->updateEmployee( $schema );
+                    $result = $this->model->updateExample( $schema );
                     return $this->json($result);
                 }else{
                     die(Utils::response(404) );

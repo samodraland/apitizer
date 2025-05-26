@@ -1,9 +1,10 @@
 <?php
 
 namespace Model;
+
 use Core\Model;
 
-class Employees extends Model{
+class Examples extends Model{
 
     private $query = "
         select
@@ -13,19 +14,19 @@ class Employees extends Model{
             email as Email,
             status as Status
         from
-            employee
+            example
         %s
         order by
             first_name asc
         %s
     ";
 
-    public function getAllEmployees(){
+    public function getAllExamples(){
         $sql = sprintf($this->query, "", "");
         return $this->execute( $sql );
     }
     
-    public function getEmployeeById( $param ){
+    public function getExampleById( $param ){
         $sql = sprintf($this->query, "where id = :id", "");
         return $this->execute( $sql, $param );
     }
@@ -38,23 +39,23 @@ class Employees extends Model{
         return $this->execute( $sql, $param );
     }
 
-    public function searchEmployee( $param ){
+    public function searchExample( $param ){
         $sql = sprintf($this->query, "where (first_name like concat('%',:keyword,'%') or last_name like concat('%',:keyword,'%') or email like concat('%',:keyword,'%')) and status = :status", "");
         return $this->execute( $sql, $param );
     }   
 
-    public function newEmployee( $param ){
-        $sql = "insert into employee(first_name, last_name, email) values(:first, :last, :email)";
+    public function newExample( $param ){
+        $sql = "insert into example(first_name, last_name, email) values(:first, :last, :email)";
         return $this->execute( $sql, $param );
     }
 
-    public function updateEmployee( $param ){
-        $sql = "update employee set first_name = :first, last_name = :last, email = :email where id = :id";
+    public function updateExample( $param ){
+        $sql = "update example set first_name = :first, last_name = :last, email = :email where id = :id";
         return $this->execute( $sql, $param );
     }
 
-    public function deleteEmployee( $param ){
-        $sql = "delete from employee where id = :id";
+    public function deleteExample( $param ){
+        $sql = "delete from example where id = :id";
         return $this->execute($sql, $param);
     }
 }

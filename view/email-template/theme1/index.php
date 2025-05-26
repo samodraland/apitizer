@@ -442,11 +442,7 @@
                                                                                                                                                                     class="t18">
                                                                                                                                                                     <h1 class="t17"
                                                                                                                                                                         style="margin:0;Margin:0;font-family:Playfair Display,Georgia,Times New Roman,Times,serif;line-height:38px;font-weight:500;font-style:normal;font-size:34px;text-decoration:none;text-transform:none;direction:ltr;color:#333333;text-align:center;mso-line-height-rule:exactly;mso-text-raise:1px;">
-                                                                                                                                                                        Nice
-                                                                                                                                                                        to
-                                                                                                                                                                        have
-                                                                                                                                                                        you
-                                                                                                                                                                        here
+                                                                                                                                                                        Nice to have you here
                                                                                                                                                                     </h1>
                                                                                                                                                                 </td>
                                                                                                                                                             </tr>
@@ -538,9 +534,7 @@
                                                                                                                                                                         <span
                                                                                                                                                                             class="t29"
                                                                                                                                                                             style="margin:0;Margin:0;font-weight:bold;mso-line-height-rule:exactly;">
-                                                                                                                                                                            What
-                                                                                                                                                                            is
-                                                                                                                                                                            APITIZER?
+                                                                                                                                                                            What is APITIZER?
                                                                                                                                                                         </span>
                                                                                                                                                                     </p>
                                                                                                                                                                 </td>
@@ -578,20 +572,7 @@
                                                                                                                                                                     class="t36">
                                                                                                                                                                     <p class="t35"
                                                                                                                                                                         style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:20px;font-weight:400;font-style:normal;font-size:15px;text-decoration:none;text-transform:none;direction:ltr;color:#0A0A0A;text-align:center;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                                                                                        Apitizer
-                                                                                                                                                                        is
-                                                                                                                                                                        a
-                                                                                                                                                                        simple
-                                                                                                                                                                        PHP
-                                                                                                                                                                        boilerplate
-                                                                                                                                                                        to
-                                                                                                                                                                        generate
-                                                                                                                                                                        JSON/JSONP,
-                                                                                                                                                                        XML
-                                                                                                                                                                        and
-                                                                                                                                                                        template
-                                                                                                                                                                        rendering.
-                                                                                                                                                                        (https://github.com/samodraland/apitizer)
+                                                                                                                                                                        Apitizer is a simple PHP framework to generate JSON/JSONP, XML and template rendering. (https://github.com/samodraland/apitizer)
                                                                                                                                                                     </p>
                                                                                                                                                                 </td>
                                                                                                                                                             </tr>
