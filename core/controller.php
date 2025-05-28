@@ -36,13 +36,27 @@ abstract class Controller extends Middleware {
                         $result = call_user_func($callback, Data::class);
                         return $result;
                     });
-                    echo $result;
+                    $this->send($result);
                     return;
                 }
             }
         }
 
         die(Utils::response(404));
+    }
+
+    final protected function send($body) {
+        $acceptEncoding = $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "";
+        
+        if (strpos($acceptEncoding, "gzip") !== false) {
+            $compressed = gzencode($body);
+            header("Content-Encoding: gzip");
+            header("Vary: Accept-Encoding");
+            header("Content-Length: " . strlen($compressed));
+            echo $compressed;
+        } else {
+            echo $body;
+        }
     }
 
     final protected function json( $result ): string{
@@ -53,7 +67,7 @@ abstract class Controller extends Middleware {
         
         $finalResult = $this->modifyResult($result);
         header( Utils::responseHeader( $finalResult["response"] ) );
-        return ( !$isJSONP ) ? json_encode($finalResult) : $jsonpCallback."(".json_encode($finalResult).")";
+        return ( !$isJSONP ) ? json_encode($finalResult, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : $jsonpCallback."(".json_encode($finalResult, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).")";
     }
 
     final protected function html( $template, $result = null ): string{
