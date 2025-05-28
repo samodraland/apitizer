@@ -4,7 +4,8 @@ $properties = array(
     "app" => array(
         "lctime" => "id_ID",
         "timezone" => "Asia/Jakarta",
-        "supportHtaccess" => true
+        "supportHtaccess" => true,
+        "connectionheader" => "auto" //close | Keep-Alive | auto
     ),
     "env" => array(
         "dev" => "http://localhost/apitizer",

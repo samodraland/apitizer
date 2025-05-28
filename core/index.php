@@ -7,6 +7,13 @@ use Helper\Utils;
 class Index extends Data{
 
     function __construct(){
+        $configConnection = Properties::getProperties("app","connectionheader");
+        $connection = $configConnection;
+        if ($configConnection === "auto") {
+            $accept = $_SERVER["HTTP_ACCEPT"] ?? "";
+            $connection = str_contains($accept, "application/json") ? "close" : "keep-alive";
+        }
+        header("Connection: $connection");
         ob_start("ob_gzhandler");
         mb_internal_encoding("UTF-8");
         date_default_timezone_set( Properties::getProperties("app", "timezone") );

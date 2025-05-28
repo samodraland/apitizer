@@ -10,7 +10,9 @@ RewriteRule ^(.*)$ index.php [QSA]
 </Limit>
 
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html
-  AddOutputFilterByType DEFLATE text/xml
-  AddOutputFilterByType DEFLATE application/json
+  # enable compression using below or handled by PHP
+
+  # AddOutputFilterByType DEFLATE text/html
+  # AddOutputFilterByType DEFLATE text/xml
+  # AddOutputFilterByType DEFLATE application/json
 </IfModule>
