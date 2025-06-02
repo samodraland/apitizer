@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 02:57 PM
+-- Generation Time: Jun 02, 2025 at 07:42 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employee`
+-- Table structure for table `example`
 --
 
-CREATE TABLE `employee` (
+CREATE TABLE `example` (
   `id` int(10) UNSIGNED NOT NULL,
   `first_name` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'NULL',
   `last_name` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -36,10 +36,10 @@ CREATE TABLE `employee` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 --
--- Dumping data for table `employee`
+-- Dumping data for table `example`
 --
 
-INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `status`) VALUES
+INSERT INTO `example` (`id`, `first_name`, `last_name`, `email`, `status`) VALUES
 (1, 'Alberto', 'Boice', 'aboice0@twitter.com', 'ACTIVE'),
 (2, 'Timmy', 'Jalland', 'tjalland1@wix.com', 'INACTIVE'),
 (3, 'Niels', 'Mandrier', 'nmandrier2@oracle.com', 'ACTIVE'),
@@ -48,7 +48,7 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `status`) VALU
 (6, 'Guillermo', 'Yate', 'gyate5@vinaora.com', 'INACTIVE'),
 (7, 'Jacki', 'Yurchenko', 'jyurchenko6@who.int', 'ACTIVE'),
 (8, 'Carlynn', 'Robet', 'crobet7@craigslist.org', 'INACTIVE'),
-(9, 'Alon', 'D''Aulby', 'adaulby8@europa.eu', 'ACTIVE'),
+(9, 'Alon', 'D\'Aulby', 'adaulby8@europa.eu', 'ACTIVE'),
 (10, 'Misha', 'Geroldi', 'mgeroldi9@google.co.uk', 'INACTIVE'),
 (11, 'Aurlie', 'Skinn', 'askinna@fotki.com', 'ACTIVE'),
 (12, 'Breena', 'Filippone', 'bfilipponeb@ovh.net', 'INACTIVE'),
@@ -139,7 +139,9 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `status`) VALU
 (97, 'Leela', 'Colecrough', 'lcolecrough2o@un.org', 'ACTIVE'),
 (98, 'Brocky', 'Causey', 'bcausey2p@artisteer.com', 'INACTIVE'),
 (99, 'Isidoro', 'Akister', 'iakister2q@usda.gov', 'ACTIVE'),
-(100, 'Lilli', 'Siggs', 'lsiggs2r@ovh.net', 'INACTIVE');
+(100, 'Lilli', 'Siggs', 'lsiggs2r@ovh.net', 'INACTIVE'),
+(107, 'first name edited', 'last name edited', 'email edited', 'ACTIVE'),
+(108, 'Foo\r\n', 'Bar\r\n', 'foo@bar.com\r\n', 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -155,13 +157,33 @@ CREATE TABLE `log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 --
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`id`, `route`, `endpoint`, `createdat`) VALUES
+(1, '/', '/examples', '2025-05-26 09:26:12'),
+(2, '/', '/examples', '2025-05-26 09:26:20'),
+(3, '/', '/examples', '2025-05-26 09:26:21'),
+(4, '/', '/examples', '2025-05-26 09:29:56'),
+(5, '/:id', '/examples/20', '2025-05-26 09:30:00'),
+(6, '/status/:status', '/examples/status/active', '2025-05-26 09:30:17'),
+(7, '/search/:keyword/status/:status', '/examples/search/doe/status/active', '2025-05-26 09:31:22'),
+(8, '/search/:keyword/status/:status', '/examples/search/jo/status/active', '2025-05-26 09:31:27'),
+(9, '/email/:id', '/examples/email/20', '2025-05-26 09:33:42'),
+(10, '/email/:id', '/examples/email/20', '2025-05-26 09:33:53'),
+(11, '/email/:id', '/examples/email/20', '2025-05-26 09:34:31'),
+(12, '/', '/examples', '2025-05-26 09:37:06'),
+(13, '/', '/examples', '2025-05-26 09:37:10'),
+(14, '/', '/examples', '2025-05-26 09:37:17');
+
+--
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `employee`
+-- Indexes for table `example`
 --
-ALTER TABLE `employee`
+ALTER TABLE `example`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -176,16 +198,16 @@ ALTER TABLE `log`
 --
 
 --
--- AUTO_INCREMENT for table `employee`
+-- AUTO_INCREMENT for table `example`
 --
-ALTER TABLE `employee`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+ALTER TABLE `example`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
