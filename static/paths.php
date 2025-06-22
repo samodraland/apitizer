@@ -2,18 +2,18 @@
 
     spl_autoload_register(function ($class) {
         $prefixes = [
-            'Controller\\' => 'controller/',
-            'Model\\' => 'model/',
-            'Core\\' => 'core/',
-            'Middleware\\' => 'middleware/',
-            'Helper\\' => 'helper/',
+            "Controller\\" => "src/controller/",
+            "Helper\\" => "src/helper/",
+            "Middleware\\" => "src/middleware/",
+            "Model\\" => "src/model/",
+            "Core\\" => "core/",
         ];
-        $file = str_replace('\\', '/', $class) . '.php';
+        $file = str_replace("\\", "/", $class) . ".php";
 
-        foreach (explode(PATH_SEPARATOR, get_include_path()) as $dir) {
+        foreach ($prefixes as $prefix => $baseDir) {
             if (strpos($class, $prefix) === 0) {
                 $relativeClass = substr($class, strlen($prefix));
-                $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+                $file = $baseDir . str_replace("\\", "/", $relativeClass) . ".php";
     
                 if (file_exists($file)) {
                     require_once $file;

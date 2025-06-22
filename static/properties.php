@@ -43,7 +43,7 @@ $properties = array(
             "username" => "apitizer@localhost.com",
             "email" => "apitizer@localhost.com",
             "password" => "apitizer",
-            "embedimage" => "/view/email-template"
+            "embedimage" => "/src/view/email-template"
         ),
         "staging" => array(
             "host" => "yourdomain",
@@ -52,7 +52,7 @@ $properties = array(
             "username" => "yourusername@yourdomain.com",
             "email" => "yourusername@yourdomain.com",
             "password" => "yourpassword",
-            "embedimage" => "/your/image/path"
+            "embedimage" => "/src/your/image/path"
         ),
         "prod" => array(
             "host" => "yourdomain",
@@ -61,13 +61,13 @@ $properties = array(
             "username" => "yourusername@yourdomain.com",
             "email" => "yourusername@yourdomain.com",
             "password" => "yourpassword",
-            "embedimage" => "/your/image/path"
+            "embedimage" => "/src/your/image/path"
         )
     ),
     "view" => array(
-        "dev" => "/view",
-        "staging" => "/view",
-        "prod" => "/view"
+        "dev" => "/src/view",
+        "staging" => "/src/view",
+        "prod" => "/src/view"
     ),
     "assets" => array(
         "dev" => "/assets",

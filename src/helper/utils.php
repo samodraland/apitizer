@@ -78,6 +78,7 @@
             $template = trim($tpl,"/");
             if (file_exists("$view/$template.php")){
                 $postdata = (!is_null($data)) ? http_build_query($data) : "";
+                echo "init: $env/$view/$template.php";
                 $ch = curl_init("$env/$view/$template.php");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
